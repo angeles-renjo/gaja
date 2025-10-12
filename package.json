@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
-    "db:migration:new": "supabase migration new"
+    "db:migration:new": "supabase migration new",
+    "generate-qr": "tsx scripts/generate-qr.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.75.0",
@@ -26,10 +27,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "supabase": "^2.48.3",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

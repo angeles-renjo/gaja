@@ -1,26 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { useOrders } from '@/hooks/useOrders';
 
 export default function AdminPage() {
-  const [statusFilter, setStatusFilter] = useState('all');
-  const { orders, isLoading, error } = useOrders(statusFilter);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'preparing':
-        return 'bg-blue-100 text-blue-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
+  const { orders, isLoading, error } = useOrders();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
@@ -47,58 +30,13 @@ export default function AdminPage() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-sm text-gray-600 mt-1">View and manage orders</p>
+          <h1 className="text-3xl font-bold text-gray-900">Order History</h1>
+          <p className="text-sm text-gray-600 mt-1">View all orders (newest first)</p>
         </div>
       </header>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setStatusFilter('all')}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                statusFilter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              All Orders
-            </button>
-            <button
-              onClick={() => setStatusFilter('pending')}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                statusFilter === 'pending'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Pending
-            </button>
-            <button
-              onClick={() => setStatusFilter('preparing')}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                statusFilter === 'preparing'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Preparing
-            </button>
-            <button
-              onClick={() => setStatusFilter('completed')}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                statusFilter === 'completed'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Completed
-            </button>
-          </div>
-        </div>
 
         {/* Loading State */}
         {isLoading && (
@@ -133,14 +71,7 @@ export default function AdminPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </span>
-                    <p className="text-xl font-bold text-gray-900 mt-2">
+                    <p className="text-xl font-bold text-gray-900">
                       ${order.total_amount.toFixed(2)}
                     </p>
                   </div>

@@ -13,7 +13,7 @@ interface OrderWithDetails extends Order {
   }[];
 }
 
-export function useOrders(statusFilter?: string) {
+export function useOrders() {
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,8 +23,8 @@ export function useOrders(statusFilter?: string) {
       try {
         setIsLoading(true);
 
-        // Build query
-        let query = supabase
+        // Fetch all orders (newest first)
+        const { data, error } = await supabase
           .from('orders')
           .select(`
             *,
@@ -38,13 +38,6 @@ export function useOrders(statusFilter?: string) {
             )
           `)
           .order('created_at', { ascending: false });
-
-        // Apply status filter if provided
-        if (statusFilter && statusFilter !== 'all') {
-          query = query.eq('status', statusFilter);
-        }
-
-        const { data, error } = await query;
 
         if (error) throw error;
 
@@ -91,7 +84,7 @@ export function useOrders(statusFilter?: string) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [statusFilter]);
+  }, []);
 
   return { orders, isLoading, error };
 }

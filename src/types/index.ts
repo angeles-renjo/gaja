@@ -12,6 +12,8 @@ export interface MenuItem {
   price: number;
   category: 'food' | 'beverage';
   image_url?: string;
+  ingredients?: string[];
+  allergies?: string[];
   available: boolean;
   created_at: string;
 }

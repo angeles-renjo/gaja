@@ -49,34 +49,52 @@ Building a serverless restaurant QR ordering system with Next.js 14 and Supabase
 
 ---
 
+### Frontend Development
+- [x] Build customer ordering page (/order)
+- [x] Create components:
+  - [x] Menu component (display menu items)
+  - [x] Cart component (shopping cart)
+  - [x] OrderConfirmation component (success message)
+
+### Custom Hooks
+- [x] Create useMenu hook (fetch menu items from Supabase)
+- [x] Create useTableInfo hook (get table details from URL param)
+- [x] Create useSubmitOrder hook (handle order submission)
+- [x] Create useOrders hook (fetch orders with real-time updates)
+
 ## 🚧 In Progress
 
-### Frontend Development
-- [ ] Build customer ordering page (/order)
-- [ ] Create components:
-  - [ ] Menu component (display menu items)
-  - [ ] Cart component (shopping cart)
-  - [ ] OrderConfirmation component (success message)
+### Testing & Deployment
+- [ ] Test complete ordering flow locally
+- [ ] Deploy to Vercel
+- [ ] Link Supabase production database
+- [ ] Test with actual QR codes in production
 
 ---
 
-## 📋 Todo - Next Steps
+### Admin Dashboard
+- [x] Build admin dashboard to view orders (/admin)
+  - [x] Display all orders in real-time (with Supabase subscriptions)
+  - [x] View order details and items
+  - [ ] Add order status update functionality (pending, preparing, completed)
 
 ### API Development
-- [ ] Implement order submission API (/api/orders/route.ts)
-- [ ] Create placeholder print API endpoint (/api/print/route.ts)
-  - Add TODO comments for Phase 2 printer integration
+- [x] Order submission handled via direct Supabase client calls (no API route needed)
+- [x] Create placeholder print API endpoint (/api/print/route.ts)
+  - Added TODO comments for Phase 2 printer integration
 
-### Admin Dashboard
-- [ ] Build admin dashboard to view orders (/admin)
-  - Display all orders in real-time
-  - Filter by status (pending, preparing, completed)
-  - View order details
+## 📋 Todo - Next Steps
 
 ### QR Code Generation
-- [ ] Create QR code generation script (scripts/generate-qr.ts)
-- [ ] Generate QR codes for tables 1-10
-- [ ] Save QR codes as PNG files
+- [x] Create QR code generation script (scripts/generate-qr.ts)
+- [x] Generate QR codes for tables 1-10
+- [x] Save QR codes as PNG files
+- [x] Optimize QR settings for iPhone/mobile scanning
+  - Error correction: M (15%)
+  - Size: 512px for better scanning
+  - Margin: 4 modules (standard quiet zone)
+- [x] Add deployment notes for production URL updates
+- [x] Configure for local network testing (192.168.4.39:3000)
 
 ### Documentation
 - [ ] Update README with Phase 1 approach
@@ -120,12 +138,22 @@ gaja/
 │   ├── app/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
-│   │   ├── order/          # TODO: Customer ordering page
-│   │   ├── admin/          # TODO: Admin dashboard
+│   │   ├── order/
+│   │   │   └── page.tsx    # ✅ Customer ordering page
+│   │   ├── admin/
+│   │   │   └── page.tsx    # ✅ Admin dashboard with real-time orders
 │   │   └── api/
-│   │       ├── orders/     # TODO: Order submission
-│   │       └── print/      # TODO: Print endpoint (Phase 2)
-│   ├── components/         # TODO: Menu, Cart, OrderConfirmation
+│   │       └── print/
+│   │           └── route.ts # ✅ Print endpoint placeholder (Phase 2)
+│   ├── components/
+│   │   ├── Menu.tsx        # ✅ Menu display component
+│   │   ├── Cart.tsx        # ✅ Shopping cart component
+│   │   └── OrderConfirmation.tsx # ✅ Order success message
+│   ├── hooks/
+│   │   ├── useMenu.ts      # ✅ Fetch menu items
+│   │   ├── useTableInfo.ts # ✅ Get table info from URL
+│   │   ├── useSubmitOrder.ts # ✅ Order submission
+│   │   └── useOrders.ts    # ✅ Fetch orders with real-time updates
 │   ├── lib/
 │   │   └── supabase.ts     # ✅ Supabase client
 │   ├── stores/
@@ -137,7 +165,8 @@ gaja/
 │   ├── migrations/
 │   │   └── 20251011224852_initial_schema.sql  # ✅ Database schema
 │   └── config.toml
-├── scripts/                # TODO: QR generation script
+├── scripts/
+│   └── generate-qr.ts  # ✅ QR code generator with deployment notes
 ├── .env.local              # ✅ Environment variables (needs Supabase creds)
 ├── .env.example            # ✅ Example env file
 ├── DATABASE_SETUP.md       # ✅ Database setup guide
@@ -162,7 +191,15 @@ gaja/
 
 ## 🎯 Current Focus
 
-**Next Task:** Build the customer ordering page and components
+**Phase 1 Core Features: COMPLETE! ✅**
+
+The restaurant ordering system is fully functional:
+- ✅ Customers can scan QR codes and place orders
+- ✅ Orders are saved to Supabase database
+- ✅ Admin dashboard shows orders in real-time
+- ✅ Tested with 2 successful orders from Table 1
+
+**Next Task:** Deploy to production (Vercel + Supabase)
 
 **Questions to Address:**
 - (User will add questions here)
@@ -171,10 +208,20 @@ gaja/
 
 ## 📝 Notes
 
-- **Phase 1 Goal:** Functional ordering system viewable in Supabase/admin dashboard
-- **Phase 2:** Thermal printer integration (when printers are available)
+- **Phase 1 Goal:** Functional ordering system viewable in Supabase/admin dashboard ✅
+- **Phase 2:** Thermal printer integration (printers identified)
+  - **Printer Model:** Epson TM-m30II-NT (M267E)
+  - Network thermal printer with Ethernet connectivity
+  - Supports ESC/POS commands
+  - Will integrate with `/api/print` endpoint
 - All printer-related code will be stubbed with TODO comments
 - Database schema is complete and production-ready
+
+### QR Code Deployment Process
+- **Local testing:** Use local network IP (http://192.168.4.39:3000)
+- **Production:** Update NEXT_PUBLIC_BASE_URL in Vercel dashboard, regenerate QR codes locally, commit and deploy
+- QR codes are static images - must regenerate if domain changes
+- Library used: `qrcode` npm package (2M+ weekly downloads, battle-tested)
 
 ## 🏗️ Architecture Decisions
 

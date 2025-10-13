@@ -21,7 +21,7 @@ export default function Menu({ items }: MenuProps) {
     <div className="space-y-8">
       {/* Food Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Food</h2>
+        <h2 className="text-2xl font-bold mb-4 text-primary-800">Food</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {foodItems.map((item) => (
             <div
@@ -30,19 +30,19 @@ export default function Menu({ items }: MenuProps) {
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{item.name}</h3>
+                  <h3 className="font-semibold text-lg text-primary-900">{item.name}</h3>
                   <p className="text-gray-600 text-sm mt-1">
                     {item.description}
                   </p>
                 </div>
-                <span className="text-lg font-bold text-green-600 ml-4">
+                <span className="text-lg font-bold text-primary-600 ml-4">
                   ${item.price.toFixed(2)}
                 </span>
               </div>
               <button
                 onClick={() => handleAddToCart(item)}
                 disabled={!item.available}
-                className="w-full mt-3 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                className="w-full mt-3 bg-primary-500 text-white py-2 px-4 rounded-md hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
                 {item.available ? 'Add to Cart' : 'Unavailable'}
               </button>
@@ -53,7 +53,7 @@ export default function Menu({ items }: MenuProps) {
 
       {/* Beverages Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Beverages</h2>
+        <h2 className="text-2xl font-bold mb-4 text-primary-800">Beverages</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {beverageItems.map((item) => (
             <div
@@ -62,19 +62,19 @@ export default function Menu({ items }: MenuProps) {
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{item.name}</h3>
+                  <h3 className="font-semibold text-lg text-primary-900">{item.name}</h3>
                   <p className="text-gray-600 text-sm mt-1">
                     {item.description}
                   </p>
                 </div>
-                <span className="text-lg font-bold text-green-600 ml-4">
+                <span className="text-lg font-bold text-primary-600 ml-4">
                   ${item.price.toFixed(2)}
                 </span>
               </div>
               <button
                 onClick={() => handleAddToCart(item)}
                 disabled={!item.available}
-                className="w-full mt-3 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                className="w-full mt-3 bg-primary-500 text-white py-2 px-4 rounded-md hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
                 {item.available ? 'Add to Cart' : 'Unavailable'}
               </button>

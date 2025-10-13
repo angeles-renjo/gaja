@@ -5,15 +5,26 @@ import { NextRequest, NextResponse } from 'next/server';
  *
  * TODO: Implement thermal printer integration when printers are available
  *
+ * PRINTER MODEL: Epson TM-m30III (M267E)
+ * - Network thermal printer (Ethernet/WiFi)
+ * - Supports ESC/POS commands
+ * - 80mm paper width
+ * - Auto-cutter included
+ *
  * This endpoint will handle printing orders to kitchen and/or counter printers.
  *
  * Requirements for Phase 2:
- * - Install thermal printer library (node-thermal-printer or escpos)
+ * - Install thermal printer library: npm install node-thermal-printer
  * - Configure printer IPs in environment variables
  * - Implement network printer discovery
  * - Format order for thermal receipt (80mm width)
  * - Handle printer errors and retries
  * - Support multiple printers (kitchen, counter)
+ *
+ * Useful libraries:
+ * - node-thermal-printer (recommended for Epson)
+ * - escpos
+ * - epson-epos-xml
  *
  * Expected request body:
  * {

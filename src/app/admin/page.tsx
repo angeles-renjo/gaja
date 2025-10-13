@@ -18,7 +18,7 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-2">Error</h1>
+          <h1 className="text-2xl font-bold text-primary-600 mb-2">Error</h1>
           <p className="text-gray-600">{error}</p>
         </div>
       </div>
@@ -41,7 +41,7 @@ export default function AdminPage() {
         {/* Loading State */}
         {isLoading && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading orders...</p>
           </div>
         )}

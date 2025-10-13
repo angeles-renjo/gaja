@@ -14,9 +14,9 @@ export default function OrderConfirmation({ onOrderAgain }: OrderConfirmationPro
       <div className="bg-white rounded-lg shadow-lg p-8">
         {/* Success Icon */}
         <div className="mb-6">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+          <div className="w-20 h-20 bg-success-100 rounded-full flex items-center justify-center mx-auto">
             <svg
-              className="w-10 h-10 text-green-600"
+              className="w-10 h-10 text-success-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -57,7 +57,7 @@ export default function OrderConfirmation({ onOrderAgain }: OrderConfirmationPro
         {/* Order Again Button */}
         <button
           onClick={onOrderAgain}
-          className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors font-semibold"
+          className="w-full bg-primary-500 text-white py-3 px-6 rounded-md hover:bg-primary-600 transition-colors font-semibold"
         >
           Order Again
         </button>

@@ -14,6 +14,7 @@ export interface MenuItem {
   image_url?: string;
   ingredients?: string[];
   allergies?: string[];
+  enabled_options?: string[]; // e.g., ["vegan", "vegetarian", "dairy_free"]
   available: boolean;
   created_at: string;
 }

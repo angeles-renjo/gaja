@@ -20,7 +20,22 @@ export function useMenu() {
 
         if (error) throw error;
 
-        setMenuItems(data || []);
+        // Resolve image_url: accept either full URL or storage key
+        const items = (data || []).map((item: any) => {
+          const val = item.image_url as string | null;
+          let resolvedUrl: string | undefined = undefined;
+          if (val) {
+            if (/^https?:\/\//i.test(val)) {
+              resolvedUrl = val; // already a full URL
+            } else {
+              const { data: urlData } = supabase.storage.from('menu').getPublicUrl(val);
+              resolvedUrl = urlData.publicUrl;
+            }
+          }
+          return { ...item, image_url: resolvedUrl };
+        });
+
+        setMenuItems(items as MenuItem[]);
       } catch (err) {
         console.error('Error fetching menu:', err);
         setError(err instanceof Error ? err.message : 'Failed to load menu');

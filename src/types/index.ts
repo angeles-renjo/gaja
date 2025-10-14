@@ -11,6 +11,7 @@ export interface MenuItem {
   description: string;
   price: number;
   category: 'food' | 'beverage';
+  subcategory?: string; // e.g., "GAJA FAVES", "HOT PLATES", "BITES"
   image_url?: string;
   ingredients?: string[];
   allergies?: string[];

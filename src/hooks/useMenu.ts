@@ -16,6 +16,7 @@ export function useMenu() {
           .select('*')
           .eq('available', true)
           .order('category', { ascending: true })
+          .order('subcategory', { ascending: true, nullsFirst: false })
           .order('name', { ascending: true });
 
         if (error) throw error;

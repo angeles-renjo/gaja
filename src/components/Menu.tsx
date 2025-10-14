@@ -256,6 +256,7 @@ export default function Menu({ items }: MenuProps) {
   const addItem = useCartStore((state) => state.addItem);
   const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'food' | 'beverage'>('food');
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set(['GAJA FAVES']));
 
   const foodItems = items.filter((item) => item.category === 'food');
   const beverageItems = items.filter((item) => item.category === 'beverage');
@@ -264,7 +265,40 @@ export default function Menu({ items }: MenuProps) {
     addItem(item, 1);
   };
 
+  const toggleSection = (subcategory: string) => {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(subcategory)) {
+        next.delete(subcategory);
+      } else {
+        next.add(subcategory);
+      }
+      return next;
+    });
+  };
+
   const displayItems = activeTab === 'food' ? foodItems : beverageItems;
+
+  // Group items by subcategory
+  const groupedItems = displayItems.reduce((acc, item) => {
+    const subcategory = item.subcategory || 'Other';
+    if (!acc[subcategory]) {
+      acc[subcategory] = [];
+    }
+    acc[subcategory].push(item);
+    return acc;
+  }, {} as Record<string, MenuItem[]>);
+
+  // Get sorted subcategory keys
+  const subcategoryOrder = ['GAJA FAVES', 'HOT PLATES', 'BITES', 'Other'];
+  const sortedSubcategories = Object.keys(groupedItems).sort((a, b) => {
+    const indexA = subcategoryOrder.indexOf(a);
+    const indexB = subcategoryOrder.indexOf(b);
+    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   return (
     <div className="space-y-6">
@@ -294,22 +328,57 @@ export default function Menu({ items }: MenuProps) {
         </div>
       </div>
 
-      {/* Menu Items Grid */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4 text-primary-800">
-          {activeTab === 'food' ? 'Food' : 'Beverages'}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {displayItems.map((item) => (
-            <ItemCard
-              key={item.id}
-              item={item}
-              onAdd={handleAddToCart}
-              onImageClick={(img) => setSelectedImage(img)}
-            />
-          ))}
-        </div>
-      </section>
+      {/* Menu Items Grid - Grouped by Subcategory with Accordions */}
+      <div className="space-y-4">
+        {sortedSubcategories.map((subcategory) => {
+          const isOpen = openSections.has(subcategory);
+          return (
+            <section key={subcategory} className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+              {/* Accordion Header */}
+              <button
+                onClick={() => toggleSection(subcategory)}
+                className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 transition-colors"
+              >
+                <h2 className="text-xl font-bold text-primary-800 uppercase tracking-wide">
+                  {subcategory}
+                </h2>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                  stroke="currentColor"
+                  className={`h-6 w-6 text-primary-700 transition-transform ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+
+              {/* Accordion Content */}
+              {isOpen && (
+                <div className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {groupedItems[subcategory].map((item) => (
+                      <ItemCard
+                        key={item.id}
+                        item={item}
+                        onAdd={handleAddToCart}
+                        onImageClick={(img) => setSelectedImage(img)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+          );
+        })}
+      </div>
 
       {/* Image Modal */}
       {selectedImage && (

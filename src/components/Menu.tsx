@@ -114,29 +114,15 @@ function ItemCard({ item, onAdd, onImageClick }: { item: MenuItem; onAdd: (item:
         </div>
       </div>
 
-      {/* Allergens + Options side-by-side on md+ */}
+      {/* Dietary + Options side-by-side on md+ */}
       {(enabled.length > 0 || (item.allergies && item.allergies.length > 0)) && (
         <div className="mb-3 md:flex md:items-start md:gap-4">
-          {/* Allergies - 30% */}
+          {/* Dietary - 30% */}
           {item.allergies && item.allergies.length > 0 && (
             <div className="mb-3 md:mb-0 md:basis-[30%] md:flex-shrink-0 rounded-md border border-accent-300 bg-accent-100 p-2.5">
               <div className="mb-1.5 flex items-center gap-1.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-3.5 w-3.5 text-accent-700"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                  />
-                </svg>
-                <span className="text-xs font-semibold uppercase tracking-wide text-accent-700">
-                  Allergies
+                <span className="text-xs font-semibold uppercase tracking-wide text-accent-700 px-4">
+                  Dietary
                 </span>
               </div>
               <div className="flex flex-wrap gap-1">
@@ -361,7 +347,7 @@ export default function Menu({ items }: MenuProps) {
                 </div>
               </div>
 
-              {/* Allergies Section */}
+              {/* Dietary Section */}
               {item.allergies && item.allergies.length > 0 && (
                 <div className="mb-3 rounded-md border border-accent-300 bg-accent-100 p-2.5">
                   <div className="mb-1.5 flex items-center gap-1.5">

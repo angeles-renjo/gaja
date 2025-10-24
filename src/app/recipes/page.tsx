@@ -2,10 +2,14 @@
 
 import Link from 'next/link';
 import RecipeCard from '@/components/RecipeCard';
+import RecipeSearchBar from '@/components/RecipeSearchBar';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useFilteredRecipes, useRecipeStore } from '@/stores/recipe-store';
 
 export default function RecipesPage() {
   const { recipes, isLoading, error } = useRecipes();
+  const filteredRecipes = useFilteredRecipes();
+  const searchQuery = useRecipeStore((state) => state.searchQuery);
 
   // Loading state
   if (isLoading) {
@@ -43,7 +47,9 @@ export default function RecipesPage() {
               </Link>
               <h1 className="text-3xl font-bold text-gray-900">Recipe Book</h1>
               <p className="text-gray-600 mt-1">
-                {recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'} available
+                {searchQuery
+                  ? `${filteredRecipes.length} of ${recipes.length} ${filteredRecipes.length === 1 ? 'recipe' : 'recipes'}`
+                  : `${recipes.length} ${recipes.length === 1 ? 'recipe' : 'recipes'} available`}
               </p>
             </div>
             <Link
@@ -72,8 +78,11 @@ export default function RecipesPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search Bar */}
+        {recipes.length > 0 && <RecipeSearchBar />}
+
         {recipes.length === 0 ? (
-          // Empty State
+          // Empty State - No recipes at all
           <div className="text-center py-16">
             <div className="mb-6 inline-flex rounded-full bg-gray-100 p-6">
               <svg
@@ -114,10 +123,34 @@ export default function RecipesPage() {
               Create Recipe
             </Link>
           </div>
+        ) : filteredRecipes.length === 0 ? (
+          // Empty State - No search results
+          <div className="text-center py-16">
+            <div className="mb-6 inline-flex rounded-full bg-gray-100 p-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-12 h-12 text-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No recipes found</h3>
+            <p className="text-gray-600 mb-6">
+              No recipes match &quot;{searchQuery}&quot;. Try a different search term.
+            </p>
+          </div>
         ) : (
           // Recipe Grid
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recipes.map((recipe) => (
+            {filteredRecipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>

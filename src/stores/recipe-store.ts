@@ -8,6 +8,7 @@ interface RecipeStore {
   recipeDetails: Record<string, RecipeWithIngredients>;
   isLoading: boolean;
   error: string | null;
+  searchQuery: string;
 
   // Actions
   fetchRecipes: () => Promise<void>;
@@ -15,6 +16,7 @@ interface RecipeStore {
   createRecipe: (formData: RecipeFormData) => Promise<{ success: boolean; recipeId?: string; error?: string }>;
   updateRecipe: (id: string, formData: RecipeFormData) => Promise<{ success: boolean; error?: string }>;
   deleteRecipe: (id: string) => Promise<{ success: boolean; error?: string }>;
+  setSearchQuery: (query: string) => void;
   clearError: () => void;
 }
 
@@ -24,6 +26,7 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
   recipeDetails: {},
   isLoading: false,
   error: null,
+  searchQuery: '',
 
   // Fetch all recipes
   fetchRecipes: async () => {
@@ -240,5 +243,22 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     }
   },
 
+  setSearchQuery: (query: string) => set({ searchQuery: query }),
+
   clearError: () => set({ error: null }),
 }));
+
+// Selector hook for filtered recipes
+export const useFilteredRecipes = () => {
+  const recipes = useRecipeStore((state) => state.recipes);
+  const searchQuery = useRecipeStore((state) => state.searchQuery);
+
+  if (!searchQuery.trim()) {
+    return recipes;
+  }
+
+  const query = searchQuery.toLowerCase();
+  return recipes.filter((recipe) =>
+    recipe.name.toLowerCase().includes(query)
+  );
+};

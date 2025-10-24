@@ -63,7 +63,17 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
         .eq('id', id)
         .single();
 
-      if (recipeError) throw recipeError;
+      if (recipeError) {
+        // Handle PGRST116 (recipe not found) gracefully
+        if (recipeError.code === 'PGRST116') {
+          set({
+            error: 'Recipe not found',
+            isLoading: false,
+          });
+          return;
+        }
+        throw recipeError;
+      }
 
       // Fetch ingredients
       const { data: ingredientsData, error: ingredientsError } = await supabase
@@ -214,12 +224,10 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
       if (deleteError) throw deleteError;
 
       // Update local state - remove from recipes list
+      // Note: We don't clear recipeDetails here to avoid triggering a refetch
+      // of the deleted recipe. The cache will be cleared naturally on navigation.
       set((state) => ({
         recipes: state.recipes.filter((r) => r.id !== id),
-        // Clear cached detail
-        recipeDetails: Object.fromEntries(
-          Object.entries(state.recipeDetails).filter(([key]) => key !== id)
-        ),
         isLoading: false,
       }));
 

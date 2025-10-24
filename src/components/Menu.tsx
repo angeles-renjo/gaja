@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { MenuItem } from '@/types';
 import { useCartStore } from '@/stores/cart-store';
 import ImageModal from './ImageModal';
@@ -69,9 +70,11 @@ function ItemCard({ item, onAdd, onImageClick }: { item: MenuItem; onAdd: (item:
             onClick={() => onImageClick({ src: item.image_url!, alt: item.name })}
             className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg transition-opacity hover:opacity-80"
           >
-            <img
+            <Image
               src={item.image_url}
               alt={item.name}
+              width={80}
+              height={80}
               className="h-full w-full object-cover"
             />
           </button>

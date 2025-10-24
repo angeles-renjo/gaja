@@ -13,6 +13,18 @@ interface OrderWithDetails extends Order {
   }[];
 }
 
+// Type for the raw Supabase response with joins
+interface SupabaseOrderResponse extends Order {
+  tables?: { table_number: number };
+  order_items?: {
+    id: string;
+    quantity: number;
+    price_at_order: number;
+    special_instructions?: string;
+    menu_items?: { name: string };
+  }[];
+}
+
 export function useOrders() {
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,10 +54,10 @@ export function useOrders() {
         if (error) throw error;
 
         // Transform data to match interface
-        const ordersWithDetails = data.map((order: any) => ({
+        const ordersWithDetails = (data as SupabaseOrderResponse[]).map((order) => ({
           ...order,
           table_number: order.tables?.table_number,
-          items: order.order_items?.map((item: any) => ({
+          items: order.order_items?.map((item) => ({
             id: item.id,
             menu_item_name: item.menu_items?.name || 'Unknown',
             quantity: item.quantity,

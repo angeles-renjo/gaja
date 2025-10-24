@@ -22,7 +22,7 @@ export function useMenu() {
         if (error) throw error;
 
         // Resolve image_url: accept either full URL or storage key
-        const items = (data || []).map((item: any) => {
+        const items = (data || []).map((item) => {
           const val = item.image_url as string | null;
           let resolvedUrl: string | undefined = undefined;
           if (val) {
@@ -33,10 +33,10 @@ export function useMenu() {
               resolvedUrl = urlData.publicUrl;
             }
           }
-          return { ...item, image_url: resolvedUrl };
+          return { ...item, image_url: resolvedUrl } as MenuItem;
         });
 
-        setMenuItems(items as MenuItem[]);
+        setMenuItems(items);
       } catch (err) {
         console.error('Error fetching menu:', err);
         setError(err instanceof Error ? err.message : 'Failed to load menu');

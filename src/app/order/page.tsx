@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useMenu } from '@/hooks/useMenu';
 import { useTableInfo } from '@/hooks/useTableInfo';
@@ -10,7 +10,7 @@ import CartModal, { CartModalHandle } from '@/components/CartModal';
 import BottomCheckoutBar from '@/components/BottomCheckoutBar';
 import OrderConfirmation from '@/components/OrderConfirmation';
 
-export default function OrderPage() {
+function OrderPageContent() {
   const searchParams = useSearchParams();
   const tableId = searchParams.get('table');
 
@@ -108,5 +108,24 @@ export default function OrderPage() {
       {/* Bottom Checkout Bar */}
       <BottomCheckoutBar onOpenCart={handleOpenCart} />
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <OrderPageContent />
+    </Suspense>
   );
 }

@@ -52,7 +52,7 @@ export default function EditRecipePage() {
             ← Back to Recipe
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Edit Recipe</h1>
-          <p className="text-gray-600 mt-1">Update "{recipe.name}"</p>
+          <p className="text-gray-600 mt-1">Update &quot;{recipe.name}&quot;</p>
         </div>
       </header>
 

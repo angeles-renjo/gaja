@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useCartStore } from '@/stores/cart-store';
 import { useSubmitOrder } from '@/hooks/useSubmitOrder';
 import ImageModal from './ImageModal';
@@ -11,7 +12,7 @@ interface CartProps {
 }
 
 export default function Cart({ onOrderSuccess }: CartProps) {
-  const { items, updateQuantity, removeItem, getTotalAmount, getItemCount } = useCartStore();
+  const { items, updateQuantity, removeItem, getTotalAmount } = useCartStore();
   const { submitOrder, isSubmitting, error } = useSubmitOrder();
   const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -65,9 +66,11 @@ export default function Cart({ onOrderSuccess }: CartProps) {
                   }
                   className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg transition-opacity hover:opacity-80"
                 >
-                  <img
+                  <Image
                     src={item.menuItem.image_url}
                     alt={item.menuItem.name}
+                    width={80}
+                    height={80}
                     className="h-full w-full object-cover"
                   />
                 </button>

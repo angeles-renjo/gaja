@@ -187,7 +187,7 @@ export default function RecipeDetailPage() {
           <div className="bg-white rounded-xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Recipe?</h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete "{recipe.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{recipe.name}&quot;? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button

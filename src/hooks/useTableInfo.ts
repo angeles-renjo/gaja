@@ -23,7 +23,7 @@ export function useTableInfo(tableId: string | null) {
         if (error) throw error;
 
         setTableNumber(data.table_number);
-        setTableInfo(tableId, data.table_number);
+        setTableInfo(tableId!, data.table_number);
       } catch (err) {
         console.error('Error fetching table info:', err);
         setError(err instanceof Error ? err.message : 'Invalid table');

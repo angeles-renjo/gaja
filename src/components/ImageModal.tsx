@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 interface ImageModalProps {
   src: string;
@@ -39,11 +40,17 @@ export default function ImageModal({ src, alt, isOpen, onClose }: ImageModalProp
         className="relative max-h-[90vh] max-w-[90vw] overflow-hidden rounded-lg shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          src={src}
-          alt={alt}
-          className="h-auto max-h-[90vh] w-auto max-w-[90vw] object-contain"
-        />
+        <div className="relative h-auto max-h-[90vh] w-auto max-w-[90vw]">
+          <Image
+            src={src}
+            alt={alt}
+            width={1200}
+            height={800}
+            className="h-auto max-h-[90vh] w-auto max-w-[90vw] object-contain"
+            style={{ width: 'auto', height: 'auto' }}
+            priority
+          />
+        </div>
 
         {/* Close button */}
         <button

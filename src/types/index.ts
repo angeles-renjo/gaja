@@ -61,3 +61,35 @@ export interface OrderResponse {
   order_id?: string;
   message?: string;
 }
+
+// Recipe Types
+export interface RecipeIngredient {
+  id: string;
+  recipe_id: string;
+  ingredient_name: string;
+  weight: string;
+  order_index: number;
+  created_at: string;
+}
+
+export interface Recipe {
+  id: string;
+  name: string;
+  instructions: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RecipeWithIngredients extends Recipe {
+  ingredients: RecipeIngredient[];
+}
+
+// Recipe Form Types
+export interface RecipeFormData {
+  name: string;
+  instructions: string;
+  ingredients: {
+    ingredient_name: string;
+    weight: string;
+  }[];
+}

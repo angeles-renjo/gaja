@@ -1,3 +1,14 @@
+// Auth Types
+export type UserRole = 'admin' | 'staff' | 'customer';
+
+export interface Profile {
+  id: string;
+  username: string;
+  role: UserRole;
+  created_at: string;
+  updated_at: string;
+}
+
 // Database Types
 export interface Table {
   id: string;

@@ -1,4 +1,5 @@
-import FeatureCard from '@/components/FeatureCard';
+import { requireAuth } from '@/actions/auth'
+import FeatureCard from '@/components/FeatureCard'
 
 // Define your app features here - add new features by adding objects to this array
 const features = [
@@ -51,27 +52,41 @@ const features = [
       </svg>
     ),
   },
-  // Add more features here as you build them
-  // Example:
-  // {
-  //   id: 'inventory',
-  //   title: 'Inventory Management',
-  //   description: 'Track and manage your restaurant inventory',
-  //   route: '/inventory',
-  //   icon: <YourIconComponent />
-  // },
-];
+  {
+    id: 'admin-dashboard',
+    title: 'Admin Dashboard',
+    description: 'View and manage all orders from customers',
+    route: '/admin',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-8 h-8"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+        />
+      </svg>
+    ),
+  },
+]
 
-export default function Home() {
+export default async function Home() {
+  // Require authentication - redirects to /login if not authenticated
+  await requireAuth()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              GAJA
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">GAJA</h1>
             <p className="text-lg text-gray-600">
               Your all-in-one restaurant management platform
             </p>
@@ -85,9 +100,7 @@ export default function Home() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">
             Features
           </h2>
-          <p className="text-gray-600">
-            Choose a feature to get started
-          </p>
+          <p className="text-gray-600">Choose a feature to get started</p>
         </div>
 
         {/* Feature Cards Grid */}
@@ -102,15 +115,6 @@ export default function Home() {
             />
           ))}
         </div>
-
-        {/* Empty State for Future Features */}
-        {features.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              No features available yet. Start building!
-            </p>
-          </div>
-        )}
       </main>
 
       {/* Footer */}
@@ -122,5 +126,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

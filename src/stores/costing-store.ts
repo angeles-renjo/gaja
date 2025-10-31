@@ -6,7 +6,7 @@ export interface MasterIngredient {
   id: string;
   ingredient_name: string;
   weight: number;
-  unit: 'g' | 'mL';
+  unit: 'g' | 'mL' | 'ea';
   purchase_price: number;
   price_per_unit: number;
   notes?: string;
@@ -32,7 +32,7 @@ export interface CostingRecipeIngredient {
   ingredient_id: string;
   ingredient_name?: string; // Populated from join
   quantity: number;
-  unit: 'g' | 'mL';
+  unit: 'g' | 'mL' | 'ea';
   price_per_unit_snapshot: number;
   cost: number;
   created_at: string;
@@ -45,7 +45,7 @@ export interface CostingRecipeWithIngredients extends CostingRecipe {
 export interface MasterIngredientFormData {
   ingredient_name: string;
   weight: number;
-  unit: 'g' | 'mL';
+  unit: 'g' | 'mL' | 'ea';
   purchase_price: number;
   notes?: string;
 }
@@ -56,7 +56,7 @@ export interface CostingRecipeFormData {
   ingredients: {
     ingredient_id: string;
     quantity: number;
-    unit: 'g' | 'mL';
+    unit: 'g' | 'mL' | 'ea';
   }[];
 }
 

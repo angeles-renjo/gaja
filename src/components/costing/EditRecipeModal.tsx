@@ -16,7 +16,7 @@ interface RecipeIngredient {
   ingredient_id: string;
   ingredient_name: string;
   quantity: string;
-  unit: 'g' | 'mL';
+  unit: 'g' | 'mL' | 'ea';
   price_per_unit: number;
 }
 

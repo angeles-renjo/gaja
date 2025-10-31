@@ -19,7 +19,7 @@ export default function EditIngredientModal({
   const [formData, setFormData] = useState({
     ingredient_name: ingredient.ingredient_name,
     weight: ingredient.weight.toString(),
-    unit: ingredient.unit as 'g' | 'mL',
+    unit: ingredient.unit as 'g' | 'mL' | 'ea',
     purchase_price: ingredient.purchase_price.toString(),
     notes: ingredient.notes || '',
   });
@@ -132,7 +132,7 @@ export default function EditIngredientModal({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-1">
-                Weight/Volume *
+                Quantity/Amount *
               </label>
               <input
                 type="number"
@@ -153,11 +153,12 @@ export default function EditIngredientModal({
               <select
                 id="unit"
                 value={formData.unit}
-                onChange={(e) => setFormData({ ...formData, unit: e.target.value as 'g' | 'mL' })}
+                onChange={(e) => setFormData({ ...formData, unit: e.target.value as 'g' | 'mL' | 'ea' })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="g">g (grams)</option>
                 <option value="mL">mL (milliliters)</option>
+                <option value="ea">ea (pieces)</option>
               </select>
             </div>
           </div>

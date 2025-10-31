@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { deleteIngredient } from '@/actions/costing';
-import { useMasterIngredientsStore } from '@/stores/costing-store';
+import { useMasterIngredientsStore, useSuppliersStore } from '@/stores/costing-store';
 
 interface IngredientCardProps {
   ingredient: {
@@ -12,6 +12,7 @@ interface IngredientCardProps {
     unit: string;
     purchase_price: number;
     price_per_unit: number;
+    supplier_id?: string;
     notes?: string;
     date_added: string;
   };
@@ -22,6 +23,18 @@ export default function IngredientCard({ ingredient, onEdit }: IngredientCardPro
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const removeIngredient = useMasterIngredientsStore((state) => state.removeIngredient);
+
+  const { suppliers, fetchSuppliers } = useSuppliersStore();
+
+  useEffect(() => {
+    if (suppliers.length === 0 && ingredient.supplier_id) {
+      fetchSuppliers();
+    }
+  }, [suppliers.length, ingredient.supplier_id, fetchSuppliers]);
+
+  const supplierName = ingredient.supplier_id
+    ? suppliers.find((s) => s.id === ingredient.supplier_id)?.supplier_name
+    : null;
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -106,6 +119,12 @@ export default function IngredientCard({ ingredient, onEdit }: IngredientCardPro
               ${ingredient.purchase_price.toFixed(2)}
             </span>
           </div>
+          {supplierName && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600">Supplier:</span>
+              <span className="font-semibold text-gray-900">{supplierName}</span>
+            </div>
+          )}
           <div className="flex items-center justify-between text-sm bg-primary-50 -mx-6 px-6 py-2">
             <span className="text-primary-700 font-medium">Price per {ingredient.unit}:</span>
             <span className="font-bold text-primary-700">

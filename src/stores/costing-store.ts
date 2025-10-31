@@ -2,6 +2,13 @@ import { create } from 'zustand';
 import { supabase } from '@/lib/supabase';
 
 // Types
+export interface Supplier {
+  id: string;
+  supplier_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface MasterIngredient {
   id: string;
   ingredient_name: string;
@@ -9,6 +16,7 @@ export interface MasterIngredient {
   unit: 'g' | 'mL' | 'ea';
   purchase_price: number;
   price_per_unit: number;
+  supplier_id?: string;
   notes?: string;
   date_added: string;
   created_at: string;
@@ -47,6 +55,7 @@ export interface MasterIngredientFormData {
   weight: number;
   unit: 'g' | 'mL' | 'ea';
   purchase_price: number;
+  supplier_id?: string;
   notes?: string;
 }
 
@@ -296,6 +305,57 @@ export const useCostingRecipesStore = create<CostingRecipesStore>((set, get) => 
   removeRecipe: (id: string) => {
     set((state) => ({
       recipes: state.recipes.filter((r) => r.id !== id),
+    }));
+  },
+
+  clearError: () => set({ error: null }),
+}));
+
+// Suppliers Store
+interface SuppliersStore {
+  // State
+  suppliers: Supplier[];
+  isLoading: boolean;
+  error: string | null;
+
+  // Actions
+  fetchSuppliers: () => Promise<void>;
+  addSupplier: (supplier: Supplier) => void;
+  clearError: () => void;
+}
+
+export const useSuppliersStore = create<SuppliersStore>((set) => ({
+  // Initial state
+  suppliers: [],
+  isLoading: false,
+  error: null,
+
+  // Fetch all suppliers
+  fetchSuppliers: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('suppliers')
+        .select('*')
+        .order('supplier_name', { ascending: true });
+
+      if (error) throw error;
+
+      set({ suppliers: data || [], isLoading: false });
+    } catch (err) {
+      console.error('Error fetching suppliers:', err);
+      set({
+        error: err instanceof Error ? err.message : 'Failed to load suppliers',
+        isLoading: false,
+      });
+    }
+  },
+
+  addSupplier: (supplier: Supplier) => {
+    set((state) => ({
+      suppliers: [...state.suppliers, supplier].sort((a, b) =>
+        a.supplier_name.localeCompare(b.supplier_name)
+      ),
     }));
   },
 

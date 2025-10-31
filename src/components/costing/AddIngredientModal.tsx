@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createMasterIngredient } from '@/actions/costing';
 import { useMasterIngredientsStore } from '@/stores/costing-store';
+import SupplierSelect from './SupplierSelect';
 
 interface AddIngredientModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export default function AddIngredientModal({ isOpen, onClose }: AddIngredientMod
     weight: '',
     unit: 'g' as 'g' | 'mL' | 'ea',
     purchase_price: '',
+    supplier_id: '',
     notes: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +35,7 @@ export default function AddIngredientModal({ isOpen, onClose }: AddIngredientMod
         weight: parseFloat(formData.weight),
         unit: formData.unit,
         purchase_price: parseFloat(formData.purchase_price),
+        supplier_id: formData.supplier_id || undefined,
         notes: formData.notes || undefined,
       });
 
@@ -43,6 +46,7 @@ export default function AddIngredientModal({ isOpen, onClose }: AddIngredientMod
           weight: '',
           unit: 'g',
           purchase_price: '',
+          supplier_id: '',
           notes: '',
         });
         onClose();
@@ -63,6 +67,7 @@ export default function AddIngredientModal({ isOpen, onClose }: AddIngredientMod
         weight: '',
         unit: 'g',
         purchase_price: '',
+        supplier_id: '',
         notes: '',
       });
       setError('');
@@ -189,6 +194,12 @@ export default function AddIngredientModal({ isOpen, onClose }: AddIngredientMod
               </div>
             </div>
           )}
+
+          {/* Supplier */}
+          <SupplierSelect
+            value={formData.supplier_id}
+            onChange={(supplierId) => setFormData({ ...formData, supplier_id: supplierId })}
+          />
 
           {/* Notes */}
           <div>

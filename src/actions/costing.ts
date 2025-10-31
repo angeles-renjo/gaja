@@ -7,6 +7,54 @@ import type {
   CostingRecipeFormData,
 } from '@/stores/costing-store';
 
+// Supplier Actions
+
+export async function createSupplier(supplierName: string) {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('suppliers')
+      .insert({
+        supplier_name: supplierName,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath('/costing');
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error creating supplier:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create supplier',
+    };
+  }
+}
+
+export async function fetchSuppliers() {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('suppliers')
+      .select('*')
+      .order('supplier_name', { ascending: true });
+
+    if (error) throw error;
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error fetching suppliers:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch suppliers',
+    };
+  }
+}
+
 // Master Ingredients Actions
 
 export async function createMasterIngredient(formData: MasterIngredientFormData) {
@@ -20,6 +68,7 @@ export async function createMasterIngredient(formData: MasterIngredientFormData)
         weight: formData.weight,
         unit: formData.unit,
         purchase_price: formData.purchase_price,
+        supplier_id: formData.supplier_id || null,
         notes: formData.notes || null,
       })
       .select()
@@ -52,6 +101,7 @@ export async function updateMasterIngredient(
         weight: formData.weight,
         unit: formData.unit,
         purchase_price: formData.purchase_price,
+        supplier_id: formData.supplier_id || null,
         notes: formData.notes || null,
       })
       .eq('id', id)

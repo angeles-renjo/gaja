@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { updateMasterIngredient } from '@/actions/costing';
 import { useMasterIngredientsStore } from '@/stores/costing-store';
 import type { MasterIngredient } from '@/stores/costing-store';
+import SupplierSelect from './SupplierSelect';
 
 interface EditIngredientModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export default function EditIngredientModal({
     weight: ingredient.weight.toString(),
     unit: ingredient.unit as 'g' | 'mL' | 'ea',
     purchase_price: ingredient.purchase_price.toString(),
+    supplier_id: ingredient.supplier_id || '',
     notes: ingredient.notes || '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +37,7 @@ export default function EditIngredientModal({
       weight: ingredient.weight.toString(),
       unit: ingredient.unit,
       purchase_price: ingredient.purchase_price.toString(),
+      supplier_id: ingredient.supplier_id || '',
       notes: ingredient.notes || '',
     });
   }, [ingredient]);
@@ -50,6 +53,7 @@ export default function EditIngredientModal({
         weight: parseFloat(formData.weight),
         unit: formData.unit,
         purchase_price: parseFloat(formData.purchase_price),
+        supplier_id: formData.supplier_id || undefined,
         notes: formData.notes || undefined,
       });
 
@@ -192,6 +196,12 @@ export default function EditIngredientModal({
               </div>
             </div>
           )}
+
+          {/* Supplier */}
+          <SupplierSelect
+            value={formData.supplier_id}
+            onChange={(supplierId) => setFormData({ ...formData, supplier_id: supplierId })}
+          />
 
           {/* Notes */}
           <div>

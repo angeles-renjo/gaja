@@ -18,7 +18,7 @@ export default function IngredientInput({
   return (
     <div className="flex gap-3 items-start">
       {/* Ingredient Name Input */}
-      <div className="flex-1">
+      <div className="w-full">
         <input
           type="text"
           placeholder="Ingredient name (e.g., All-purpose flour)"
@@ -30,7 +30,7 @@ export default function IngredientInput({
       </div>
 
       {/* Weight Input */}
-      <div className="w-50">
+      <div className="w-full">
         <input
           type="text"
           placeholder="Amount (e.g., 2 cups)"

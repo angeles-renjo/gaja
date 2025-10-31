@@ -125,7 +125,7 @@ export default function RecipeForm({ mode, initialData }: RecipeFormProps) {
           </button>
         </div>
 
-        <div className="space-y-3 p-4 rounded-lg">
+        <div className="space-y-3 rounded-lg">
           {formData.ingredients.map((ingredient, index) => (
             <IngredientInput
               key={index}

@@ -106,3 +106,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Global input styles */
+input,
+textarea,
+select {
+  color: var(--gray-900);
+}

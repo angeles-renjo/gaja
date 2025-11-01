@@ -348,13 +348,13 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
                       <div className="w-28">
                         <input
                           type="number"
-                          step="0.01"
-                          min="0.01"
+                          step="0.000001"
+                          min="0.000001"
                           required
                           value={ing.quantity}
                           onChange={(e) => handleQuantityChange(index, e.target.value)}
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                          placeholder="0.00"
+                          placeholder="0.000000"
                         />
                       </div>
                       <div className="w-16">
@@ -362,7 +362,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
                       </div>
                       <div className="w-20 text-right">
                         <div className="text-sm font-semibold text-gray-900">
-                          ${((parseFloat(ing.quantity) || 0) * ing.price_per_unit).toFixed(2)}
+                          ${((parseFloat(ing.quantity) || 0) * ing.price_per_unit).toFixed(6)}
                         </div>
                       </div>
                       <button

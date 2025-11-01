@@ -142,12 +142,12 @@ export default function EditIngredientModal({
                 type="number"
                 id="weight"
                 required
-                step="0.01"
-                min="0.01"
+                step="0.000001"
+                min="0.000001"
                 value={formData.weight}
                 onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder="1000"
+                placeholder="1000.000000"
               />
             </div>
             <div>
@@ -176,12 +176,12 @@ export default function EditIngredientModal({
               type="number"
               id="purchase_price"
               required
-              step="0.01"
-              min="0.01"
+              step="0.000001"
+              min="0.000001"
               value={formData.purchase_price}
               onChange={(e) => setFormData({ ...formData, purchase_price: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="25.00"
+              placeholder="25.000000"
             />
           </div>
 

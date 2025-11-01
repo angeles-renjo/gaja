@@ -125,7 +125,7 @@ export default function RecipeDetailModal({
                         </div>
                         <div className="w-24 text-right">
                           <div className="text-sm font-semibold text-gray-900">
-                            ${currentIngCost.toFixed(2)}
+                            ${currentIngCost.toFixed(6)}
                           </div>
                         </div>
                       </div>

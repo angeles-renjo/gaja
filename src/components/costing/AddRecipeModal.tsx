@@ -22,6 +22,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
   const [formData, setFormData] = useState({
     recipe_name: '',
     servings: '',
+    sell_price: '',
   });
   const [ingredients, setIngredients] = useState<RecipeIngredient[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,6 +94,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
       const result = await createCostingRecipe({
         recipe_name: formData.recipe_name,
         servings: formData.servings ? parseInt(formData.servings) : undefined,
+        sell_price: formData.sell_price ? parseFloat(formData.sell_price) : undefined,
         ingredients: ingredients.map((ing) => ({
           ingredient_id: ing.ingredient_id,
           quantity: parseFloat(ing.quantity),
@@ -102,7 +104,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
 
       if (result.success && result.data) {
         addRecipe(result.data);
-        setFormData({ recipe_name: '', servings: '' });
+        setFormData({ recipe_name: '', servings: '', sell_price: '' });
         setIngredients([]);
         onClose();
       } else {
@@ -117,7 +119,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setFormData({ recipe_name: '', servings: '' });
+      setFormData({ recipe_name: '', servings: '', sell_price: '' });
       setIngredients([]);
       setError('');
       onClose();
@@ -162,7 +164,7 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
           )}
 
           {/* Recipe Name and Servings */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label htmlFor="recipe_name" className="block text-sm font-medium text-gray-700 mb-1">
                 Recipe Name *
@@ -189,6 +191,21 @@ export default function AddRecipeModal({ isOpen, onClose }: AddRecipeModalProps)
                 onChange={(e) => setFormData({ ...formData, servings: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="4"
+              />
+            </div>
+            <div>
+              <label htmlFor="sell_price" className="block text-sm font-medium text-gray-700 mb-1">
+                Sell Price (optional)
+              </label>
+              <input
+                type="number"
+                id="sell_price"
+                min="0"
+                step="0.01"
+                value={formData.sell_price}
+                onChange={(e) => setFormData({ ...formData, sell_price: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="0.00"
               />
             </div>
           </div>

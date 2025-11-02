@@ -2,7 +2,7 @@
 
 import { useCostingRecipe } from '@/hooks/useCostingRecipe';
 import { useMasterIngredients } from '@/hooks/useMasterIngredients';
-import { calculateCurrentRecipeCost } from '@/stores/costing-store';
+import { calculateCurrentRecipeCost, calculateProfit, calculateCostPercentage } from '@/stores/costing-store';
 
 interface RecipeDetailModalProps {
   recipeId: string;
@@ -21,6 +21,10 @@ export default function RecipeDetailModal({
   // Calculate current cost using live master ingredient prices
   const currentCost = recipe ? calculateCurrentRecipeCost(recipe.ingredients, masterIngredients) : 0;
   const currentCostPerServing = recipe?.servings ? currentCost / recipe.servings : 0;
+
+  // Calculate profit and cost percentage
+  const profit = recipe ? calculateProfit(recipe.sell_price, currentCost) : null;
+  const costPercentage = recipe ? calculateCostPercentage(currentCost, recipe.sell_price) : null;
 
   if (!isOpen) return null;
 
@@ -150,6 +154,18 @@ export default function RecipeDetailModal({
                     </span>
                   </div>
                 )}
+                <div className="flex items-center justify-between border-t border-primary-200 pt-2">
+                  <span className="text-sm font-medium text-primary-700">Profit:</span>
+                  <span className={`text-lg font-bold ${profit !== null && profit >= 0 ? 'text-green-600' : profit !== null ? 'text-red-600' : 'text-gray-400'}`}>
+                    {profit !== null ? `$${profit.toFixed(2)}` : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between border-t border-primary-200 pt-2">
+                  <span className="text-sm font-medium text-primary-700">Cost %:</span>
+                  <span className={`text-lg font-bold ${costPercentage !== null ? (costPercentage >= 25 ? 'text-red-600' : 'text-green-600') : 'text-gray-400'}`}>
+                    {costPercentage !== null ? `${costPercentage.toFixed(2)}%${costPercentage >= 25 ? ' (Over Food Cost)' : ''}` : 'N/A'}
+                  </span>
+                </div>
               </div>
             </div>
           )}

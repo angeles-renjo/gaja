@@ -1,7 +1,7 @@
 'use client';
 
 import type { CostingRecipe } from '@/stores/costing-store';
-import { useCostingRecipesStore, calculateCurrentRecipeCost } from '@/stores/costing-store';
+import { useCostingRecipesStore, calculateCurrentRecipeCost, calculateProfit, calculateCostPercentage } from '@/stores/costing-store';
 import { useMasterIngredients } from '@/hooks/useMasterIngredients';
 
 interface RecipeCostingCardProps {
@@ -21,6 +21,10 @@ export default function RecipeCostingCard({ recipe, onView, onEdit, onDelete }: 
     : recipe.total_cost; // Fallback to snapshot cost
 
   const currentCostPerServing = recipe.servings ? currentCost / recipe.servings : undefined;
+
+  // Calculate profit and cost percentage
+  const profit = calculateProfit(recipe.sell_price, currentCost);
+  const costPercentage = calculateCostPercentage(currentCost, recipe.sell_price);
 
   return (
     <div className="relative group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
@@ -134,6 +138,20 @@ export default function RecipeCostingCard({ recipe, onView, onEdit, onDelete }: 
               </div>
             </>
           )}
+
+          {/* Profit and Cost Percentage */}
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-600">Profit:</span>
+            <span className={`font-semibold ${profit !== null && profit >= 0 ? 'text-green-600' : profit !== null ? 'text-red-600' : 'text-gray-400'}`}>
+              {profit !== null ? `$${profit.toFixed(2)}` : 'N/A'}
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-600">Cost %:</span>
+            <span className={`font-semibold ${costPercentage !== null ? (costPercentage >= 25 ? 'text-red-600' : 'text-green-600') : 'text-gray-400'}`}>
+              {costPercentage !== null ? `${costPercentage.toFixed(2)}%${costPercentage >= 25 ? ' (Over Food Cost)' : ''}` : 'N/A'}
+            </span>
+          </div>
         </div>
 
         {/* Date Created */}

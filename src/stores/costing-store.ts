@@ -29,6 +29,7 @@ export interface CostingRecipe {
   servings?: number;
   total_cost: number;
   cost_per_serving?: number;
+  sell_price?: number;
   date_created: string;
   created_at: string;
   updated_at: string;
@@ -62,6 +63,7 @@ export interface MasterIngredientFormData {
 export interface CostingRecipeFormData {
   recipe_name: string;
   servings?: number;
+  sell_price?: number;
   ingredients: {
     ingredient_id: string;
     quantity: number;
@@ -371,4 +373,26 @@ export function calculateCurrentRecipeCost(
     const master = masterIngredients.find(m => m.id === ing.ingredient_id);
     return total + (ing.quantity * (master?.price_per_unit || 0));
   }, 0);
+}
+
+// Helper function to calculate profit
+export function calculateProfit(
+  sellPrice: number | undefined,
+  totalCost: number
+): number | null {
+  if (sellPrice === undefined || sellPrice === null) {
+    return null;
+  }
+  return sellPrice - totalCost;
+}
+
+// Helper function to calculate cost percentage
+export function calculateCostPercentage(
+  totalCost: number,
+  sellPrice: number | undefined
+): number | null {
+  if (sellPrice === undefined || sellPrice === null || sellPrice === 0) {
+    return null;
+  }
+  return (totalCost / sellPrice) * 100;
 }

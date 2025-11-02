@@ -171,6 +171,7 @@ export async function createCostingRecipe(formData: CostingRecipeFormData) {
       .insert({
         recipe_name: formData.recipe_name,
         servings: formData.servings || null,
+        sell_price: formData.sell_price || null,
         total_cost: 0, // Will be calculated by triggers
       })
       .select()
@@ -246,6 +247,7 @@ export async function updateCostingRecipe(
       .update({
         recipe_name: formData.recipe_name,
         servings: formData.servings || null,
+        sell_price: formData.sell_price || null,
       })
       .eq('id', id);
 

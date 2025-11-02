@@ -211,6 +211,10 @@ export default function RecipeCostingList() {
           recipeId={selectedRecipeId}
           isOpen={!!selectedRecipeId}
           onClose={() => setSelectedRecipeId(null)}
+          onEdit={() => {
+            setEditingRecipeId(selectedRecipeId);
+            setSelectedRecipeId(null);
+          }}
         />
       )}
       {editingRecipeId && (

@@ -12,9 +12,11 @@ export default function RecipeCostingList() {
   const { recipes, isLoading, error } = useCostingRecipes();
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
+  const [recipeModal, setRecipeModal] = useState<{
+    recipeId: string;
+    mode: 'view' | 'edit';
+  } | null>(null);
   const [deletingRecipeId, setDeletingRecipeId] = useState<string | null>(null);
-  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null);
 
   // Filter recipes based on search query
   const filteredRecipes = recipes.filter((recipe) =>
@@ -195,8 +197,8 @@ export default function RecipeCostingList() {
               <RecipeCostingCard
                 key={recipe.id}
                 recipe={recipe}
-                onView={() => setSelectedRecipeId(recipe.id)}
-                onEdit={() => setEditingRecipeId(recipe.id)}
+                onView={() => setRecipeModal({ recipeId: recipe.id, mode: 'view' })}
+                onEdit={() => setRecipeModal({ recipeId: recipe.id, mode: 'edit' })}
                 onDelete={() => setDeletingRecipeId(recipe.id)}
               />
             ))}
@@ -206,23 +208,20 @@ export default function RecipeCostingList() {
 
       {/* Modals */}
       <AddRecipeModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
-      {selectedRecipeId && (
-        <RecipeDetailModal
-          recipeId={selectedRecipeId}
-          isOpen={!!selectedRecipeId}
-          onClose={() => setSelectedRecipeId(null)}
-          onEdit={() => {
-            setEditingRecipeId(selectedRecipeId);
-            setSelectedRecipeId(null);
-          }}
-        />
-      )}
-      {editingRecipeId && (
-        <EditRecipeModal
-          recipeId={editingRecipeId}
-          isOpen={!!editingRecipeId}
-          onClose={() => setEditingRecipeId(null)}
-        />
+      {recipeModal && (
+        <>
+          <RecipeDetailModal
+            recipeId={recipeModal.recipeId}
+            isOpen={recipeModal.mode === 'view'}
+            onClose={() => setRecipeModal(null)}
+            onEdit={() => setRecipeModal({ recipeId: recipeModal.recipeId, mode: 'edit' })}
+          />
+          <EditRecipeModal
+            recipeId={recipeModal.recipeId}
+            isOpen={recipeModal.mode === 'edit'}
+            onClose={() => setRecipeModal(null)}
+          />
+        </>
       )}
       {deletingRecipeId && (
         <DeleteRecipeModal

@@ -1,5 +1,6 @@
 import { requireAuth } from '@/actions/auth'
 import FeatureCard from '@/components/FeatureCard'
+import { redirect } from 'next/navigation'
 
 // Define your app features here - add new features by adding objects to this array
 const features = [
@@ -100,7 +101,28 @@ const features = [
 
 export default async function Home() {
   // Require authentication - redirects to /login if not authenticated
-  await requireAuth()
+  const user = await requireAuth()
+
+  // Customers should not access dashboard - redirect to public order page
+  if (user.profile?.role === 'customer') {
+    redirect('/order')
+  }
+
+  // Filter features based on user role
+  const visibleFeatures = features.filter((feature) => {
+    const role = user.profile?.role
+
+    // Admin sees all features
+    if (role === 'admin') return true
+
+    // Staff only sees Recipe Book
+    if (role === 'staff') {
+      return feature.id === 'recipe-book'
+    }
+
+    // Default: hide all (shouldn't reach here due to customer redirect above)
+    return false
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -127,7 +149,7 @@ export default async function Home() {
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
+          {visibleFeatures.map((feature) => (
             <FeatureCard
               key={feature.id}
               title={feature.title}

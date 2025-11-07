@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { deleteIngredient } from '@/actions/costing';
 import { useMasterIngredientsStore, useSuppliersStore } from '@/stores/costing-store';
 
@@ -43,11 +44,12 @@ export default function IngredientCard({ ingredient, onEdit }: IngredientCardPro
       if (result.success) {
         removeIngredient(ingredient.id);
         setShowDeleteConfirm(false);
+        toast.success('Ingredient deleted successfully!');
       } else {
-        alert(result.error || 'Failed to delete ingredient');
+        toast.error(result.error || 'Failed to delete ingredient');
       }
     } catch {
-      alert('Failed to delete ingredient');
+      toast.error('Failed to delete ingredient');
     } finally {
       setIsDeleting(false);
     }

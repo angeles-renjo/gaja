@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { deleteCostingRecipe } from '@/actions/costing';
 import { useCostingRecipesStore } from '@/stores/costing-store';
 
@@ -27,12 +28,13 @@ export default function DeleteRecipeModal({
       const result = await deleteCostingRecipe(recipeId);
       if (result.success) {
         removeRecipe(recipeId);
+        toast.success('Recipe deleted successfully!');
         onClose();
       } else {
-        alert(result.error || 'Failed to delete recipe');
+        toast.error(result.error || 'Failed to delete recipe');
       }
     } catch {
-      alert('Failed to delete recipe');
+      toast.error('Failed to delete recipe');
     } finally {
       setIsDeleting(false);
     }

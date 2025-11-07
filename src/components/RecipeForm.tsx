@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import IngredientInput from './IngredientInput';
 import { RecipeFormData, RecipeWithIngredients } from '@/types';
 import { useCreateRecipe, useUpdateRecipe } from '@/hooks/useRecipeMutations';
@@ -54,7 +55,7 @@ export default function RecipeForm({ mode, initialData }: RecipeFormProps) {
     );
 
     if (hasEmptyIngredients) {
-      alert('Please fill in all ingredient fields or remove empty ones.');
+      toast.error('Please fill in all ingredient fields or remove empty ones.');
       return;
     }
 
@@ -66,9 +67,10 @@ export default function RecipeForm({ mode, initialData }: RecipeFormProps) {
     }
 
     if (result?.success) {
+      toast.success(mode === 'create' ? 'Recipe created successfully!' : 'Recipe updated successfully!');
       router.push('/recipes');
     } else {
-      alert(result?.error || 'Failed to save recipe');
+      toast.error(result?.error || 'Failed to save recipe');
     }
   };
 

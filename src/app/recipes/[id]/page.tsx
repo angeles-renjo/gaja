@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 import { useRecipe } from '@/hooks/useRecipe';
 import { useDeleteRecipe } from '@/hooks/useRecipeMutations';
 
@@ -18,9 +19,10 @@ export default function RecipeDetailPage() {
   const handleDelete = async () => {
     const result = await deleteRecipe(recipeId);
     if (result.success) {
+      toast.success('Recipe deleted successfully!');
       router.push('/recipes');
     } else {
-      alert(result.error || 'Failed to delete recipe');
+      toast.error(result.error || 'Failed to delete recipe');
     }
   };
 

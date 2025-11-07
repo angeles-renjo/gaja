@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useActionState } from 'react'
+import toast from 'react-hot-toast'
 import { getUsersAction, createUserAction, deleteUserAction } from '@/actions/users'
 import type { UserRole } from '@/types'
 
@@ -17,6 +18,7 @@ export default function UsersPage() {
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null)
+  const [confirmDeleteUserId, setConfirmDeleteUserId] = useState<string | null>(null)
 
   const [formState, formAction, formPending] = useActionState(
     createUserAction,
@@ -31,6 +33,7 @@ export default function UsersPage() {
   // Reload users when form succeeds
   useEffect(() => {
     if (formState?.success) {
+      toast.success('User created successfully!')
       loadUsers()
       setShowForm(false)
     }
@@ -49,15 +52,15 @@ export default function UsersPage() {
   }
 
   async function handleDelete(userId: string) {
-    if (!confirm('Are you sure you want to delete this user?')) return
-
     setDeleteLoading(userId)
     const result = await deleteUserAction(userId)
     setDeleteLoading(null)
+    setConfirmDeleteUserId(null)
 
     if (result.error) {
-      alert(result.error)
+      toast.error(result.error)
     } else {
+      toast.success('User deleted successfully!')
       loadUsers()
     }
   }
@@ -216,7 +219,7 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => setConfirmDeleteUserId(user.id)}
                         disabled={deleteLoading === user.id}
                         className="text-red-600 hover:text-red-900 disabled:text-gray-400 disabled:cursor-not-allowed"
                       >
@@ -230,6 +233,62 @@ export default function UsersPage() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {confirmDeleteUserId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
+            <div className="text-center">
+              {/* Warning Icon */}
+              <div className="mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-16 h-16 text-red-500 mx-auto"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                  />
+                </svg>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Delete User?</h3>
+
+              {/* Message */}
+              <p className="text-gray-600 mb-2">
+                Are you sure you want to delete this user?
+              </p>
+              <p className="text-gray-500 text-sm mb-6">
+                This action cannot be undone.
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => setConfirmDeleteUserId(null)}
+                  disabled={deleteLoading !== null}
+                  className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDelete(confirmDeleteUserId)}
+                  disabled={deleteLoading !== null}
+                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {deleteLoading === confirmDeleteUserId ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
